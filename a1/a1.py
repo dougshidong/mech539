@@ -6,24 +6,12 @@ import matplotlib.pyplot as plt
 
 def initCond(x):
     return (1.0 + np.tanh(250.0 * (x - 20.0))) / 2.0
+
 def exactSol(x, c, t):
     return initCond(x - c * t)
 
-# Space Discretization
-L = 40.0
-nx = 41
-dx = L / (nx - 1)
-x = np.linspace(0.0, L + dx, nx, dtype = float)
-
-# Time Discretization
-tf = 10.0
-dt = 1.0
-nt = int(np.ceil(tf / dt))
-
-# Initial Condition
-u0 = initCond(x)
-# Constant
-c = 0.5;
+def solError(un, ue):
+    return np.linalg.norm(un - ue) / len(un)**0.5
 
 def upwind(u, dt, dx):
     u1 = list(u)
@@ -62,59 +50,131 @@ def maccormack(u, dt, dx):
 
     return u2
 
-# Scheme
-# 0 = Upwind
-# 1 = Lax
-# 2 = Lax-Wendroff
-# 3 = Leap-Frog
-# 4 = MacCormack
-# map the inputs to the function blocks
-nscheme = 6
-scheme = {1 : upwind,
-          2 : lax,
-          3 : laxwendroff,
-          4 : leapfrog,
-          5 : maccormack}
+# Space Discretization
+L = 40.0
+nx = 41
+dx = L / nx
+# Time Discretization
+tf = 10.0
+dt = 1.0
+nt = int(np.ceil(tf / dt))
+# Constant
+c = 0.5;
 
-usol = np.empty([nscheme, nx])
+q = 3
 # Exact Solution
-usol[0, :] = exactSol(x, c, tf)
-# Numerical Solutions
-for s in range(1, nscheme):
-    if s != 4:
-        u = list(u0)
-        for t in range(nt):
-            print t
-            u = scheme[s](u, dt, dx)
-    else:
-        u = list(u0)
-        u_old = list(u0)
-        for t in range(nt):
-            u_new = scheme[s](u, u_old, dt, dx)
-            u_old = u
-            u = u_new
-    usol[s, :] = u
+if q == 1 or q == 2:
+    xe = np.linspace(0.0, L, 99500, dtype = float)
+    uexact = exactSol(xe, c, tf)
+    plt.figure(figsize=(10,5))
+    plt.plot(xe, uexact, color = 'k', label = 'Exact')
 
-# Plotting Q1
-plt.rc('text', usetex=True)
-plt.rc('font', family='serif')
+CFL = 0.5
 
-plt.figure(figsize=(10,5))
-col=('b', 'g', 'r', 'c', 'm', 'y', 'k')
-sname = ('Exact', 'Upwind', 'Lax', 'Lax-Wendroff', 'Leap-Frog', 'MacCormack')
-for s in range(nscheme):
-    plt.plot(x, usol[s, :], color = col[s],
-             marker = 'o', mec = col[s], mfc = 'None', ms = 3,
-             label = sname[s])
+if q == 1:
+    nscheme = 5
+    nxlist = [41]
+if q == 2:
+    nscheme = 2
+    nxlist = [41, 81, 161, 321]
+if q == 3:
+    nscheme = 5
+    nxlist = [41, 81, 161, 321, 641, 1281, 2561]
+    err = np.empty((nscheme, len(nxlist)))
 
-plt.axis([0, 40, -0.4, 1.1])
+for (nxi, nx) in enumerate(nxlist):
+    dx = L / (nx - 1)
+    dt = CFL * dx / c
+    nt = int(np.ceil(tf / dt))
 
-plt.title(r'Velocity Distribution, $\Delta x = 1.0$, $\Delta t = 1.0$')
-plt.xlabel(r'$x$')
-plt.ylabel(r'$u$')
-plt.legend(loc='upper left')
+    usol = np.empty((nscheme, nx))
+    x = np.linspace(0.0, L, nx, dtype = float)
+    # Initial Condition
+    u0 = initCond(x)
+    # Scheme
+    # 0 = Upwind
+    # 1 = Lax
+    # 2 = Lax-Wendroff
+    # 3 = Leap-Frog
+    # 4 = MacCormack
+    if q == 1 or q == 3:
+        scheme = {0 : upwind,
+                  1 : lax,
+                  2 : laxwendroff,
+                  3 : leapfrog,
+                  4 : maccormack}
+    if q == 2:
+        scheme = {0 : upwind,
+                  1 : maccormack}
+    
+    # Numerical Solutions
+    for s in range(0, nscheme):
+        if s != 3:
+            u = list(u0)
+            for t in range(nt):
+                u = scheme[s](u, dt, dx)
+        else:
+            u = list(u0)
+            u_old = list(u0)
+            for t in range(nt):
+                u_new = scheme[s](u, u_old, dt, dx)
+                u_old = u
+                u = u_new
+        usol[s, :] = u
+    
+    # Plotting
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+    
+    col=('b', 'g', 'r', 'c', 'm', 'y', 'k')
+    symb = ('o', 'v', '<', 's', 'p', '*', 'h', 'H', 'D', 'd')
+
+    if q == 1:
+        sname = ('Upwind', 'Lax', 'Lax-Wendroff', 'Leap-Frog', 'MacCormack')
+        for s in range(nscheme):
+            plt.plot(x, usol[s, :], color = col[s],
+                     marker = symb[s], mec = col[s], mfc = 'None', ms = 6,
+                     label = sname[s])
+        plt.axis([0, 40, -0.4, 1.1])
+        plt.title(r'Velocity Distribution, $\Delta x = %.1f$, $\Delta t = %.1f$' % (dx, dt))
+        plt.legend(loc='upper left')
+        plt.xlabel(r'$x$')
+        plt.ylabel(r'$u$')
+
+    if q == 2:
+        sname = ('Upwind', 'MacCormack')
+        for s in range(nscheme):
+            plt.plot(x, usol[s, :], color = col[nxi],
+                     marker = symb[s], mec = col[nxi], mfc = 'None', ms = 6,
+                     label = sname[s] + ' nx = ' + str(nx))
+        plt.axis([20, 30, -0.4, 1.1])
+        plt.title(r'Grid Study Velocity Distribution')
+        plt.legend(loc='upper left', fontsize = 10)
+        plt.xlabel(r'$x$')
+        plt.ylabel(r'$u$')
+    if q == 3:
+        uexact = exactSol(x, c, tf)
+        print err.shape
+        for s in range(0, nscheme):
+            print nxi, s
+            print usol.shape
+            print err.shape
+
+            err[s, nxi] = solError(usol[s, :], uexact)
+        print err
+if q == 3:
+    sname = ('Upwind', 'Lax', 'Lax-Wendroff', 'Leap-Frog', 'MacCormack')
+    for s in range(nscheme):
+        plt.semilogy(nxlist, err[s, :], color = col[s],
+                 marker = symb[s], mec = col[s], mfc = 'None', ms = 6,
+                 label = sname[s])
+    plt.axis([40, 2600, -0.1, 0.2])
+    plt.title(r'Order of Accuracy')
+    plt.legend(loc='upper left')
+    plt.xlabel(r'Number of Points')
+    plt.ylabel(r'Error')
 
 plt.savefig('plot.pdf')
-#plt.savefig('./report/Figures/q2.pdf')
+#plt.savefig('./report/Figures/q3.pdf')
 
 # Plotting Q2
