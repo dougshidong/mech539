@@ -61,16 +61,16 @@ nt = int(np.ceil(tf / dt))
 # Constant
 c = 0.5;
 
-q = 3
+q = 4
 q3calc = 0
 # Exact Solution
+plt.figure(figsize=(10,5))
 if q == 1 or q == 2:
     xe = np.linspace(0.0, L, 99500, dtype = float)
     uexact = exactSol(xe, c, tf)
-    plt.figure(figsize=(10,5))
     plt.plot(xe, uexact, color = 'k', label = 'Exact')
 
-CFL = 0.8
+CFL = 0.5
 
 if q == 1:
     nscheme = 5
@@ -97,8 +97,8 @@ if q == 3:
 if q == 4:
     nscheme = 1
     nxlist = [41, 81, 161, 162, 167]
-    scheme = {0 : laxwendroff,
-              1 : laxwendroff}
+    #scheme = {0 : laxwendroff}
+    scheme = {0 : lax}
 
 for (nxi, nx) in enumerate(nxlist):
     dx = L / (nx - 1)
@@ -167,12 +167,13 @@ for (nxi, nx) in enumerate(nxlist):
             for s in range(0, nscheme):
                 err[s, nxi] = solError(usol[s, :], uexact)
     if q == 4:
-        sname = (['Lax-Wendroff',''])
+        #sname = (['Lax-Wendroff',''])
+        sname = (['Lax',''])
         for s in range(nscheme):
             plt.plot(x, usol[s, :], color = col[nxi],
                      marker = symb[s], mec = col[nxi], mfc = 'None', ms = 6,
                      label = sname[s] + ' CFL = ' + str(CFL))
-        plt.axis([0, 40, -0.4, 1.1])
+        plt.axis([15, 30, -0.4, 1.1])
         plt.title(r'Stability Condition')
         plt.legend(loc='upper left', fontsize = 10)
         plt.xlabel(r'$x$')
@@ -195,6 +196,6 @@ if q == 3:
     plt.ylabel(r'Error')
 
 plt.savefig('plot.pdf')
-plt.savefig('./report/Figures/q3.pdf')
+plt.savefig('./report/Figures/q4_1.pdf')
 
 # Plotting Q2
