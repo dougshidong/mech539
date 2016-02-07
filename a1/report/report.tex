@@ -55,47 +55,68 @@
 
 \section*{Question 1}
 
-\begin{figure}
+The numerical solutions with the Upwind, Lax, Lax-Wendroff, Leap-Frog, and MacCormack schemes as well as the exact analytical solution are plotted in Figure \ref{fig:q11} and Figure \ref{fig:q12}.
+For a time-step $\Delta t = 1.0$, a spacing $\Delta x = 1.0$ and a wave speed $c=0.5$, the Courant-Friedrichs-Lewy number is given by $CFL = c \Delta t / \Delta x = 0.5$.
+A time-step $\Delta t = 0.5$ results in a $CFL = 0.25$.
+
+\begin{figure}[h]
     \centering
     \includegraphics[width = \textwidth]{./Figures/q1_1}
     \caption{Velocity Distribution for $\Delta t = 1.0$}
     \label{fig:q11}
 \end{figure}
 
-\begin{figure}
+The Upwind and Lax schemes are dominated with dissipation error, whereas the Lax-Wendroff, Leap-Frog and MacCormack schemes are mostly dispersive.
+Due to the dissipation, Upwind and Lax have trouble capturing the sharp wave. The Lax scheme seems to be much more dissipative than the Upwind one.
+The other schemes are much better at capturing the sharp wave.
+However, the dispersion is creating oscillations in the regions of high gradient as well as slowing down the wavespeed.
+
+\begin{figure}[h]
     \centering
     \includegraphics[width = \textwidth]{./Figures/q1_2}
     \caption{Velocity Distribution for $\Delta t = 0.5$}
     \label{fig:q12}
 \end{figure}
 
-\begin{figure}
+By lowering the $CFL$, both the dissipation error and the dispersion error have increased.
+Even though some schemes are dominated by one of the error types, both types can actually be noticed in all the plots.
+
+
+\section*{Question 2}
+
+The Upwind and MacCormack schemes have been used for the grid study.
+The CFL number is kept constant at $CFL = 0.5$, therefore, the time-step is decreased proportionally to the spacing.
+Figure \ref{fig:q2} shows the solutions for different grid sizes.
+
+\begin{figure}[h]
     \centering
     \includegraphics[width = \textwidth]{./Figures/q2}
     \caption{Grid Study with CFL = 0.5}
     \label{fig:q2}
 \end{figure}
 
-\begin{figure}
+As the grid is refined, the numerical solution approches the exact one. The MacCormack scheme seems to exhibit a slightly higher amplitude in the oscillations due to dispersion.
+
+\begin{figure}[h]
     \centering
     \includegraphics[width = \textwidth]{./Figures/q3}
-    \caption{Stability Analysis}
-    \label{fig:q2}
+    \caption{Order of Accuracy}
+    \label{fig:q3}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width = \textwidth]{./Figures/q4_1}
     \caption{Stability Condition for Lax}
-    \label{fig:q2}
+    \label{fig:q4}
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width = \textwidth]{./Figures/q4_2}
     \caption{Stability Condition for Lax-Wendroff}
-    \label{fig:q2}
+    \label{fig:q4}
 \end{figure}
 
 
