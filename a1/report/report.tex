@@ -22,6 +22,8 @@
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{booktabs}
+\usepackage{pdfpages}
+
 
 \lstdefinestyle{mystyle}{
     %backgroundcolor=\color{backcolour},   
@@ -59,69 +61,84 @@ The numerical solutions with the Upwind, Lax, Lax-Wendroff, Leap-Frog, and MacCo
 For a time-step $\Delta t = 1.0$, a spacing $\Delta x = 1.0$ and a wave speed $c=0.5$, the Courant-Friedrichs-Lewy number is given by $CFL = c \Delta t / \Delta x = 0.5$.
 A time-step $\Delta t = 0.5$ results in a $CFL = 0.25$.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width = \textwidth]{./Figures/q1_1}
-    \caption{Velocity Distribution for $\Delta t = 1.0$}
-    \label{fig:q11}
-\end{figure}
-
 The Upwind and Lax schemes are dominated with dissipation error, whereas the Lax-Wendroff, Leap-Frog and MacCormack schemes are mostly dispersive.
 Due to the dissipation, Upwind and Lax have trouble capturing the sharp wave. The Lax scheme seems to be much more dissipative than the Upwind one.
 The other schemes are much better at capturing the sharp wave.
 However, the dispersion is creating oscillations in the regions of high gradient as well as slowing down the wavespeed.
 
-\begin{figure}[h]
+By lowering the $CFL$, both the dissipation error and the dispersion error have increased.
+Even though some schemes are dominated by one of the error types, both types can actually be noticed in all the plots.
+
+\begin{figure}[!h]
     \centering
-    \includegraphics[width = \textwidth]{./Figures/q1_2}
+    \includegraphics[width = 0.95\textwidth]{./Figures/q1_1}
+    \caption{Velocity Distribution for $\Delta t = 1.0$}
+    \label{fig:q11}
+\end{figure}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.95\textwidth]{./Figures/q1_2}
     \caption{Velocity Distribution for $\Delta t = 0.5$}
     \label{fig:q12}
 \end{figure}
 
-By lowering the $CFL$, both the dissipation error and the dispersion error have increased.
-Even though some schemes are dominated by one of the error types, both types can actually be noticed in all the plots.
 
-
+\newpage
 \section*{Question 2}
 
 The Upwind and MacCormack schemes have been used for the grid study.
 The CFL number is kept constant at $CFL = 0.5$, therefore, the time-step is decreased proportionally to the spacing.
 Figure \ref{fig:q2} shows the solutions for different grid sizes.
-
-\begin{figure}[h]
+As the grid is refined, the numerical solution approches the exact one. 
+\begin{figure}[!h]
     \centering
-    \includegraphics[width = \textwidth]{./Figures/q2}
+    \includegraphics[width = 0.95\textwidth]{./Figures/q2}
     \caption{Grid Study with CFL = 0.5}
     \label{fig:q2}
 \end{figure}
 
-As the grid is refined, the numerical solution approches the exact one. The MacCormack scheme seems to exhibit a slightly higher amplitude in the oscillations due to dispersion.
+\newpage
+\section*{Question 3}
 
-\begin{figure}[h]
+To check the order of accuracy, the number of points is doubled from 41 points to 40561 points.
+The CFL is kept constant to keep the algorithm stable so the time step is reduced by half every time.
+
+It can be seen in Figure \ref{fig:q3} that the error reduces as the number of points increases.
+The slope of each scheme is related to the order of accuracy of the scheme. 
+Therefore, it is possible to deduce that the Upwind and Lax schemes are first order accurate, while the others are second order.
+
+\begin{figure}[!h]
     \centering
-    \includegraphics[width = \textwidth]{./Figures/q3}
+    \includegraphics[width = 0.95\textwidth]{./Figures/q3}
     \caption{Order of Accuracy}
     \label{fig:q3}
 \end{figure}
 
-\begin{figure}[h]
+\newpage
+\section*{Question 4}
+
+The stability condition is derived for both Lax and Lax-Wendroff in the following pages.
+A CFL of 1 is found to be the upper bound for a stable scheme in both cases.
+Figure \ref{fig:q41} and \ref{fig:q42} show that the error starts increasing as soon as the CFL goes above 1.
+The gain in error is small enough to get a converged solution since there are only 10 iterations.
+\begin{figure}[!h]
     \centering
-    \includegraphics[width = \textwidth]{./Figures/q4_1}
+    \includegraphics[width = 0.95\textwidth]{./Figures/q4_1}
     \caption{Stability Condition for Lax}
-    \label{fig:q4}
+    \label{fig:q41}
 \end{figure}
-
-
-\begin{figure}[h]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width = \textwidth]{./Figures/q4_2}
+    \includegraphics[width = 0.95\textwidth]{./Figures/q4_2}
     \caption{Stability Condition for Lax-Wendroff}
-    \label{fig:q4}
+    \label{fig:q42}
 \end{figure}
 
+\includepdf[pages={1-2}]{./Figures/derivations.PDF}
 
+\section*{Question 5}
 
-
+Consistency of Upwind derived in later page.
 
 \section*{Codes}
 
@@ -129,4 +146,5 @@ All codes are available on my GitHub:
 
 \url{https://github.com/dougshidong/mech539/tree/master/a1}
 
+\includepdf[pages={1-2}]{./Figures/derivations.PDF}
 \end{document}
