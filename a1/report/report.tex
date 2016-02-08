@@ -64,7 +64,7 @@ A time-step $\Delta t = 0.5$ results in a $CFL = 0.25$.
 The Upwind and Lax schemes are dominated with dissipation error, whereas the Lax-Wendroff, Leap-Frog and MacCormack schemes are mostly dispersive.
 Due to the dissipation, Upwind and Lax have trouble capturing the sharp wave. The Lax scheme seems to be much more dissipative than the Upwind one.
 The other schemes are much better at capturing the sharp wave.
-However, the dispersion is creating oscillations in the regions of high gradient as well as slowing down the wavespeed.
+However, the dispersion is creating oscillations in the regions of high gradient as well as slowing down the wave speed.
 
 By lowering the $CFL$, both the dissipation error and the dispersion error have increased.
 Even though some schemes are dominated by one of the error types, both types can actually be noticed in all the plots.
@@ -89,7 +89,7 @@ Even though some schemes are dominated by one of the error types, both types can
 The Upwind and MacCormack schemes have been used for the grid study.
 The CFL number is kept constant at $CFL = 0.5$, therefore, the time-step is decreased proportionally to the spacing.
 Figure \ref{fig:q2} shows the solutions for different grid sizes.
-As the grid is refined, the numerical solution approches the exact one. 
+As the grid is refined, the numerical solution approaches the exact one. 
 \begin{figure}[!h]
     \centering
     \includegraphics[width = 0.95\textwidth]{./Figures/q2}
@@ -146,5 +146,5 @@ All codes are available on my GitHub:
 
 \url{https://github.com/dougshidong/mech539/tree/master/a1}
 
-\includepdf[pages={1-2}]{./Figures/derivations.PDF}
+\includepdf[pages={3}]{./Figures/derivations.PDF}
 \end{document}
