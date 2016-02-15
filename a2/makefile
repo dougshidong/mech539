@@ -1,9 +1,11 @@
 OUT = a2.exe
-OBJ = prec.f90 a2.f90
-DBG = -g
+OBJ = solver.f90 a2.f90
+DBG = -Wall -Wextra -Wconversion -pedantic -fbounds-check -ffpe-trap=zero,overflow,underflow -fbacktrace -g
+PRC = -fdefault-real-8 -fdefault-integer-8
+#PRC = -fdefault-integer-8
 compile:
-	gfortran $(OBJ) -O3 -o $(OUT)
+	gfortran $(OBJ) $(PRC) -O3 -o $(OUT)
 dbg:
-	gfortran -Wall -Wextra -Wconversion -pedantic -fbounds-check -ffpe-trap=zero,overflow,underflow -g -fbacktrace $(OBJ) -o $(OUT)
+	gfortran $(PRC) $(DBG) $(OBJ) -o $(OUT)
 clean:
 	rm -fv *.out *.mod *.MOD $(OUT)
