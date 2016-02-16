@@ -2,15 +2,16 @@ MODULE SOLVER
     INTEGER :: NI, NJ
     REAL    :: W, TOL
     CONTAINS
-    SUBROUTINE SOLVELAPLACE(U, B, RESI, ITER, ISOLV, W)
+    SUBROUTINE SOLVELAPLACE(U, B, RESI, TIMES, ITER, ISOLV, W)
         IMPLICIT REAL (A-H,O-Z)
     
-        REAL, DIMENSION(:) :: U, B, RESI
+        REAL, DIMENSION(:) :: U, B, RESI, TIMES
         REAL, ALLOCATABLE  :: UOLD(:)
         IF(ISOLV == 1) ALLOCATE(UOLD(SIZE(U)))
         ERROR = 9999
         RES = 0
         ITER = 0
+        CALL CPU_TIME(TSTART)
         DO WHILE(ERROR > TOL)
             ITER = ITER + 1
             IF(ISOLV == 1) UOLD = U
@@ -37,10 +38,12 @@ MODULE SOLVER
             ENDDO
             ERROR = RES
             RESI(ITER) = RES
-            IF(MOD(ITER, 5000) == 0) WRITE(*,*) ITER, RES
+            CALL CPU_TIME(TIMES(ITER))
+            IF(MOD(ITER, 10000) == 0) WRITE(*,*) ITER, RES
         ENDDO
-        WRITE(*,*) ITER, RES
         IF(ISOLV == 1) DEALLOCATE(UOLD)
+        TIMES(:) = TIMES(:) - TSTART
+        WRITE(*,*) ITER, RES, TIMES(ITER)
     END SUBROUTINE
     !***********************************************************************
     FUNCTION IGETIJ(I, J, NI)

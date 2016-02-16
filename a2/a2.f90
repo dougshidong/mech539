@@ -3,14 +3,20 @@ PROGRAM A2MAIN
     
     IMPLICIT REAL (A-H,O-Z)
     
-    REAL, ALLOCATABLE            :: U(:), B(:), Z(:), R(:)
-    REAL, DIMENSION (10000000)   :: RESI
+    REAL, ALLOCATABLE            :: U(:), B(:), Z(:), R(:), WEIGHTS(:)
+    REAL, DIMENSION (10000000)   :: RESI, TIMES
     CHARACTER(LEN = 11)          :: FNAME
     INTEGER                      :: ISIZE(3)
 
     W = 1.5
+    NW = 6
+    ALLOCATE(WEIGHTS(NW))
+    WEIGHTS(:) = (/0.75, 1.00, 1.25, 1.5, 1.75, 1.99/)
     ISIZE(1:3) = (/ 100, 200, 400 /)
-    ICOND = 1 ! CHECK CONDITION NUMBER
+!    ISIZE(1:5) = (/ 50, 100, 200, 300, 400/)
+    ICOND = 0 ! CHECK CONDITION NUMBER
+    DO IW = 1, NW
+    W = WEIGHTS(IW)
     DO ISOLV = 3, 3
         DO INI = 1, 3
             NI = ISIZE(INI)
@@ -32,10 +38,11 @@ PROGRAM A2MAIN
               ENDDO
             ENDDO
             ! SOLVE
-            TOL = 1E-15
-            CALL SOLVELAPLACE(U, B, RESI, ITER, ISOLV, W)
+            TOL = 1E-6
+            CALL SOLVELAPLACE(U, B, RESI, TIMES, ITER, ISOLV, W)
 
             WRITE(FNAME,'("RESULTS", I1, I3 )' )  ISOLV, NI
+            WRITE(FNAME,'("RESULTS", I1, I3)' )  IW, NI
             OPEN(UNIT = 11, FILE = FNAME, FORM='FORMATTED')  
             WRITE(11,*) NI
             WRITE(11,*) NJ 
@@ -46,6 +53,9 @@ PROGRAM A2MAIN
             WRITE(11,*) ITER
             DO I = 1, ITER
                 WRITE(11,*) RESI(I)
+            ENDDO
+            DO I = 1, ITER
+                WRITE(11,*) TIMES(I)
             ENDDO
             CLOSE(11)
 
@@ -67,7 +77,7 @@ PROGRAM A2MAIN
                         Z(IJ) = 1.0
                     ENDDO
                 ENDDO
-                CALL SOLVELAPLACE(Z, R, RESI, ITER, JSOLV, W)
+                CALL SOLVELAPLACE(Z, R, RESI, TIMES, ITER, JSOLV, W)
                 COND = NORM2(Z) / NORM2(U) / 3E-16
                 WRITE(*,*) 'CONDITION NUMBER FOR N = ', NI, ' : ', COND
                 DEALLOCATE(Z, R)
@@ -75,6 +85,7 @@ PROGRAM A2MAIN
 
             DEALLOCATE(U, B)
         ENDDO
+    ENDDO
     ENDDO
 
 END PROGRAM
