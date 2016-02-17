@@ -29,8 +29,9 @@ MODULE SOLVER
                     IF(ISOLV == 2) U(IJ) = ( B(IJ) - (U(IM) + U(IP) &
                                                     + U(JM) + U(JP)) ) / (-4.0)
                     IF(ISOLV == 3) THEN
-                       UTEMP = ( B(IJ) - (U(IM) + U(IP) + U(JM) + U(JP)) ) / (-4.0)
-                       U(IJ) = (1 - W) * U(IJ) + W * UTEMP
+                       UTEMP = U(IJ)
+                       UGS = ( B(IJ) - (U(IM) + U(IP) + U(JM) + U(JP)) ) / (-4.0)
+                       U(IJ) = (1 - W) * U(IJ) + W * UGS
                     ENDIF
                     DU = ABS(UTEMP - U(IJ))
                     RES = MAX(RES, DU)

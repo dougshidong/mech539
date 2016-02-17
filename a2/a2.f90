@@ -8,16 +8,16 @@ PROGRAM A2MAIN
     CHARACTER(LEN = 11)          :: FNAME
     INTEGER                      :: ISIZE(3)
 
-    W = 1.5
-    NW = 6
+    NW = 7
     ALLOCATE(WEIGHTS(NW))
-    WEIGHTS(:) = (/0.75, 1.00, 1.25, 1.5, 1.75, 1.99/)
+    WEIGHTS(:) = (/0.75, 1.00, 1.25, 1.5, 1.75, 1.90, 1.99/)
     ISIZE(1:3) = (/ 100, 200, 400 /)
 !    ISIZE(1:5) = (/ 50, 100, 200, 300, 400/)
     ICOND = 0 ! CHECK CONDITION NUMBER
-    DO IW = 1, NW
+    DO IW = 1, 1
     W = WEIGHTS(IW)
-    DO ISOLV = 3, 3
+    W = 1.5
+    DO ISOLV = 1, 3
         DO INI = 1, 3
             NI = ISIZE(INI)
             NJ = NI
@@ -42,7 +42,7 @@ PROGRAM A2MAIN
             CALL SOLVELAPLACE(U, B, RESI, TIMES, ITER, ISOLV, W)
 
             WRITE(FNAME,'("RESULTS", I1, I3 )' )  ISOLV, NI
-            WRITE(FNAME,'("RESULTS", I1, I3)' )  IW, NI
+            !WRITE(FNAME,'("RESULTS", I1, I3)' )  IW, NI
             OPEN(UNIT = 11, FILE = FNAME, FORM='FORMATTED')  
             WRITE(11,*) NI
             WRITE(11,*) NJ 

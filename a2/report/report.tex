@@ -93,7 +93,7 @@ The condition number increases with grid size. It is consistent with the fact th
 \centering
 \begin{tabular}{cccc} \toprule
     {Grid Size} & {100} & {200} & {400}\\ \midrule
-    {Condition Number} &8749 & 35607 & 143186\\
+    {Condition Number} & 1968 & 7905  & 29028\\
 \bottomrule
 \end{tabular}
 \caption{Condition Number for Various Grid Sizes}
@@ -142,14 +142,14 @@ However, Jacobi is much faster than the other two methods when -O3 is enabled du
 \centering
 \begin{tabular}{cccc} \toprule
     {} & {Jacobi} & {Gauss-Seidel} & {SOR}\\ \midrule
-    {Iterations} & 81787 & 52109 & 17435\\
-    {Time (O3)} & 48.96 & 45.68 & 21.22\\
-    {Time/Iterations (O3)} & 0.599 & 0.877 & 1.217\\
-    {Time (g)} & 429.09 & 265.84 & 98.87\\
-    {Time/Iterations(g)} & 5.24 & 5.10 & 5.67\\
+    {Iterations} & 81787 & 52109 & 23340\\
+    {Time (O3)} & 48.96 & 45.68 & 28.23\\
+    {Time/Iterations (O3)} & 0.599 & 0.877 & 1.210\\
+    {Time (g)} & 429.09 & 265.84 & 125.07\\
+    {Time/Iterations(g)} & 5.24 & 5.10 & 5.36\\
 \bottomrule
 \end{tabular}
-\caption{Condition Number for Various Grid Sizes}
+\caption{Time and Iterations for Different Methods $nx = 400$}
 \label{tab2}
 \end{table}
 
@@ -189,28 +189,61 @@ c_n = 2 \int_0^1 sin(n \pi x) dx / sinh(n\pi)
 \label{eq1}
 \end{equation}
 
-The absolute error of the numerical solution versus the approximated analytical solution is show in Figure \ref{fig:errorc}.
-For this reason, the relative error is calculated using the L1-norm due to its robustness against outliers.Figure \ref{fig:error} shows the error versus the grid size.
+The absolute error of the numerical solution versus the approximated analytical solution is show in Figure \ref{fig:errorc}. Along
+For this reason, the relative error is calculated using the L1-norm due to its robustness against outliers.
+Figure \ref{fig:error} shows the error versus the grid size.
 First, all iterative methods give the same error as it would be expected since the same linear system is being solved.
-Second, the slope is nearly 2, which corresponds to a second-order accuracy.
+Second, the logarithmic slope is nearly 2, meaning that the error is proportial to $(\Delta x)^2$, which corresponds to second-order accuracy.
 
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width = 0.85\textwidth]{./Figures/ErrorContour.pdf}
-    \caption{Order of Accuracy}
+    \includegraphics[width = 0.65\textwidth]{./Figures/ErrorContour.pdf}
+    \caption{Contour Plot of Absolute Error}
     \label{fig:errorc}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width = 0.85\textwidth]{./Figures/Error.pdf}
+    \includegraphics[width = 0.65\textwidth]{./Figures/Error.pdf}
     \caption{Order of Accuracy}
     \label{fig:error}
 \end{figure}
 
 
 \section*{Question 7}
+
+Figure \ref{fig:sor100}-\ref{fig:sor400} show the convergence of the SOR method for different relaxation parameters and grid sizes.
+When the relaxation parameter is less than 1, it takes more iterations than GS.
+When it is exactly 1, the exact GS is retrieved.
+For values above 1, increasing the relaxation parameter also increases convergence rates..
+However, if the relaxation parameter is greater or equal to 2, the iterative method diverges.
+Even values near 2 such as 1.99 start being dangerously close to making the iterative solving unstable.
+
+The optimal relaxation parameter will depend on how close it is allowed to be 2 without sacrificing stability. For all grid sizes, the optimal parameter will be between 1.90 and 1.99.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./Figures/SOR100.pdf}
+    \caption{Relaxation Parameter Study $nx = 100$}
+    \label{fig:sor100}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./Figures/SOR200.pdf}
+    \caption{Relaxation Parameter Study $nx = 200$}
+    \label{fig:sor200}
+\end{figure}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./Figures/SOR400.pdf}
+    \caption{Relaxation Parameter Study $nx = 400$}
+    \label{fig:sor400}
+\end{figure}
+\section*{Bonus}
+
+The bonus questions are appended at the end of the document.
 
 \section*{Codes}
 
