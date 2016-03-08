@@ -7,8 +7,8 @@ program main
 
     double precision, allocatable :: phi(:,:)
     double precision, allocatable :: resi(:)
-    double precision    :: del_min = 0.020D0
-    double precision    :: conv_tol = 3e-4
+    double precision    :: del_min = 0.025D0
+    double precision    :: conv_tol = 2e-10
 
     integer             :: isolv
 
@@ -20,7 +20,7 @@ program main
 
     allocate(resi(nint(1e7)))
 
-    phi = 0.5D0
+    phi = 0.00D0
     phi(1:2, :) = 0.0d0
     phi(imax, :) = 0.0d0
     phi(:, jmax) = 0.0d0

@@ -1,6 +1,6 @@
 module grid
     double precision, allocatable :: x(:), y(:)
-    integer             :: imax = 150, jmax = 66
+    integer             :: imax = 80, jmax = 40
 
     contains
     subroutine generategrid(del_min)
@@ -51,7 +51,7 @@ module grid
           x(i) = x(i-1) + del_min 
         else
           ! If x is downstream then stretch the grid until the right farfield boundary
-          x(i) = x(i-1) + (x(i-1) - x(i-2)) * 1.10
+          x(i) = x(i-1) + (x(i-1) - x(i-2)) * 1.32
         end if
 
         if (i.lt.imax) x(imax-i) = -x(i) ! Mirror the grid about imax/2.
@@ -67,7 +67,7 @@ module grid
     y(2) = del_min
     do j = 3, jmax
       ! Stretch the grid until the upper farfield boundary
-      y(j) = y(j-1) + (y(j-1) - y(j-2)) * 1.085
+      y(j) = y(j-1) + (y(j-1) - y(j-2)) * 1.160
     end do
 
     call gridout() 
