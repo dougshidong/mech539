@@ -7,7 +7,7 @@ module solvers
     contains
 
 
-    subroutine solve_murmcol(phi, resi, isolv, tol)
+    subroutine solve_murmcol(phi, resi, times, isolv, tol)
     use grid
     use boundaryConditions
 
@@ -19,11 +19,13 @@ module solvers
     integer          :: isolv
     integer          :: i, j, iter
     double precision :: tol, error, phitemp, phigs, dphi, res
+    double precision :: times(:), tstart
     double precision :: w = 1.85
 
     if(isolv == 1) allocate(phiold(size(phi,1), size(phi,2)))
     error = 9999
     iter = 0
+    call cpu_time(tstart)
     do while(error > tol)
         call evalAmu(phi)
         call evalCoeff()
@@ -71,8 +73,9 @@ module solvers
         error = res
         resi(iter) = res
         if(mod(iter, 100) == 0) write(*,*) iter, res
-
+        call cpu_time(times(iter))
     end do ! While Loop
+    times(:) = times(:) - tstart
 
     endsubroutine
 
