@@ -1,13 +1,14 @@
 module output
     contains
-    subroutine solout(phi, fname)
+    subroutine solout(phi, fname, resi, times, iterations)
         use grid
 
         implicit none
 
         double precision :: phi(:, :)
+        double precision :: resi(:), times(:)
         double precision, allocatable, dimension(:, :) :: u, v, Mach, p, cp
-        integer :: igridf, i, j
+        integer :: igridf, i, j, iterations
         character(len=20) :: fname
 
         allocate(u(imax,jmax), v(imax,jmax), &
@@ -16,21 +17,44 @@ module output
         call get_M_u_v_p(phi, u, v, Mach, p, cp)
 
         igridf = 10
+        ! Output for Tecplot
+!       open(unit = igridf, file = trim(fname))
+!       write(igridf, 301)
+!       write(igridf, 302)
+!       write(igridf, 303)
+!       write(igridf, 304)
+!       write(igridf,305) ' I =', size(x),', J =', size(y),', F=POINT'
+!       do j = 1, size(y) 
+!         do i = 1, size(x) 
+!          write(igridf,306) x(i), y(j), phi(i,j), u(i,j), v(i,j), &
+!                            Mach(i,j), p(i,j), cp(i,j)
+!         enddo
+!       enddo
+!       close(igridf)
+       
+        ! Output for Python
         open(unit = igridf, file = trim(fname))
-        
-        write(igridf, 301)
-        write(igridf, 302)
-        write(igridf, 303)
-        write(igridf, 304)
-        write(igridf,305) ' I =', size(x),', J =', size(y),', F=POINT'
-        do j = 1, size(y) 
-          do i = 1, size(x) 
-           write(igridf,306) x(i), y(j), phi(i,j), u(i,j), v(i,j), &
-                             Mach(i,j), p(i,j), cp(i,j)
+
+!!      write(igridf, *) size(x)
+!!      write(igridf, *) size(y)
+
+        do i = 1, size(x) 
+          do j = 1, size(y) 
+!           write(igridf, *) x(i), y(j), phi(i,j), u(i,j), v(i,j), &
+!                            Mach(i,j), p(i,j), cp(i,j)
+            write(igridf, *) x(i), y(j), cp(i,j)
           enddo
         enddo
-
         close(igridf)
+        
+        open(unit = igridf, file = trim('conv'//fname))
+
+!       write(igridf, *) iterations
+        do i = 1, iterations 
+            write(igridf, *) resi(i), times(i)
+        enddo
+        close(igridf)
+
 
         deallocate(u,v,Mach,p)
         return
@@ -76,12 +100,9 @@ module output
                 endif
  
                 ! Evaluate speed of sound
-                if((a02 - (gam - 1.0d0) * u(i,j)**2 + v(i,j)**2.0) < 0) then
-                write(*,*) i, j, (a02 - (gam - 1.0d0) * u(i,j)**2 + v(i,j)**2.0)
-                endif
-
-                sound = sqrt(a02 - (gam - 1.0d0) * u(i,j)**2 + v(i,j)**2.0)
-                sound = sqrt(a02 - (gam - 1.0d0) * U_in * (u(i,j) - U_in))
+                sound = sqrt(a02 - 0.50d0 * (gam - 1.0d0) * u(i,j)**2 + v(i,j)**2.0)
+!               sound = sqrt(a02 - (gam - 1.0d0) * U_in * (u(i,j) - U_in))
+                
                 ! Evaluate Mach Number
                 Mach(i,j) = sqrt(u(i,j)**2 + v(i,j)**2) / sound
 
@@ -90,10 +111,23 @@ module output
                          * (u(i,j) / U_in - 1.0d0))
                          
                 ! Evaluate Pressure Coefficient
-                cp(i,j) = (1.0d0 + 0.5d0 * (gam - 1.0d0) * M_in**2.0d0 &
-                          * (1.0d0 - (u(i,j)**2.0d0 + v(i,j)**2.0d0)/U_in**2.0d0)) &
-                          ** (gam / (gam - 1.0d0)) &
-                          / (0.50d0 * gam * M_in**2.0d0)
+                cp(i,j) = (p(i,j) / p_in - 1.0d0) &
+                          / (0.50d0 * gam / a_in**2.0d0 * U_in**2.0d0)
+                
+                if(i == 1) then
+                    cp(i,j) = -2.0d0 &
+                        * (phi(i+1,j) - phi(i,j)) / (x(i+1) - x(i)) &
+                        / U_in
+                else if(i == imax) then
+                    cp(i,j) = -2.0d0 &
+                        * (phi(i,j) - phi(i-1,j)) / (x(i) - x(i-1)) &
+                        / U_in
+                else
+                    cp(i,j) = -2.0d0 &
+                        * (phi(i+1,j) - phi(i-1,j)) / (x(i+1) - x(i-1)) &
+                        / U_in
+                endif
+
             enddo
         enddo
 
