@@ -187,7 +187,7 @@ subroutine question4()
         allocate(phi(imax, jmax))
         do isolv = 3, 2, -1
 
-            phi = 0.0D0
+            phi = 0.0d0
             resi = 0.0d0
             times = 0.0d0
 

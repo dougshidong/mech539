@@ -62,14 +62,13 @@ module solvers
                              + dc(i, j) * phi(i-1, j) &
                              + ec(i, j) * phi(i+1, j))
                 enddo
-                rhs(2) = rhs(2) - cc(i, j) * phi(i, j-1)
-                rhs(jmax-1) = rhs(jmax-1) - bc(i, j) * phi(i, jmax)
+                rhs(2) = rhs(2) - cc(i, 2) * phi(i, 1)
+                rhs(jmax-1) = rhs(jmax-1) - bc(i, jmax-1) * phi(i, jmax)
 
                 call TDMA(lower, diag, upper, rhs, xvec)
-
-                dphi = maxval(abs(phi(2:jmax-1, j) - xvec(:)))
+                dphi = maxval(abs(phi(i, 2:jmax-1) - xvec(:)))
                 res = max(res, dphi)
-                phi(2:jmax-1, j) = xvec(:)
+                phi(i, 2:jmax-1) = xvec(:)
             enddo
         endif
         
@@ -174,7 +173,7 @@ module solvers
         enddo
 
         x(n) = d(n) / b(n)
-        do k = n-1, 1
+        do k = n-1, 1, -1
             x(k) = (d(k) - c(k) * x(k+1)) / b(k)
         enddo
 
