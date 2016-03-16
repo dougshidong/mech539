@@ -57,11 +57,11 @@ The coarse grid has $80$ nodes in the $x$-direction and $40$ nodes in the $y$-di
 The grid spans $x=[-0.05, 47.5]$ and $y=[0.0, 50.9]$.
 
 When a finer grid is required, additional points are inserted evenly between each node to refine the grid.
-The $159 \times 79$ and $317 \times 157$ grids will be refered as the medium and fine grids respectively.
+The $159 \times 79$ and $317 \times 157$ grids will be referred as the medium and fine grids respectively.
 
 \section*{Mach Number Study}
 
-In this section, the coarse grid is used and the freestream Mach number $M_{in}$ is varied between $[0.80,0.90]$ with increments of $0.02$.
+In this section, the coarse grid is used and the free-stream Mach number $M_{in}$ is varied between $[0.80,0.90]$ with increments of $0.02$.
 Figure \ref{fig:conv2} shows the convergence of the algorithm down to 5\textsc{E-}15.
 Higher $M_{in}$ seem to take slightly more iterations to converge.
 It can be explained by looking at the earlier iterations shown in Figure \ref{fig:conv22}.
@@ -125,8 +125,8 @@ An oblique shock appears at the trailing edge for a Mach number of 0.90.
 
 The coefficient of pressure $C_p$ for the coarse, medium and fine grid is plotted in Figure \ref{fig:q3cpsurf}.
 The shock location minimally moves upstream as the grid is refined.
-From the location of the points on the shock, the reason could be simply because the coarse grid does not have enough points on the airfoil to accurately represent the small recovery.
-The pressure recovery is however seen in the contour plot from the previous section on the coarse grid.
+From the location of the points on the shock, the reason could be simply because the coarse grid does not have enough points on the airfoil to accurately represent the small pressure recovery.
+The recovery can however be seen in the contour plot from the previous section on the coarse grid.
 
 \begin{figure}[!htbp]
     \centering
@@ -145,7 +145,7 @@ However, the lower number of iterations is offset by the higher CPU time per ite
 
 The earlier iterations converge much quicker for the LGS method until approximately 1\textsc{E-}9.
 Then, each step afterwards does not improve the solution enough to offset the high CPU time cost.
-The convergence to machine precision ends up between fairly equal in terms of CPU time if machine precision is required.
+The convergence ends up being fairly equal in terms of CPU time if machine precision is required.
 If a lower tolerance is acceptable, LGS will be quicker to converge.
 
 
