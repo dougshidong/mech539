@@ -1,9 +1,5 @@
 \documentclass[letterpaper,12pt,]{article}
 
-\usepackage{titling}
-
-\setlength{\droptitle}{5in}   % This is your set screw
-
 \usepackage[%
     left=1in,%
     right=1in,%
@@ -12,12 +8,10 @@
     paperheight=11in,%
     paperwidth=8.5in%
 ]{geometry}%
-\usepackage{comment}
 
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage[section]{placeins}
 \usepackage[font=small,skip=-2pt]{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
@@ -79,28 +73,28 @@ As the $M_{in}$ increases, a shock forms and starts moving aft, until it reaches
 Moreover, the strength of the shock also increases since a higher decrease in static pressure is required to retrieve the atmosphere pressure.
 Figure \ref{fig:cpcontour8084} and \ref{fig:cpcontour8690} show the coefficient of pressure contours for the different $M_{in}$.
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width = 0.85\textwidth]{./Figures/convergenceq2.pdf}
     \caption{Convergence of Murman-Cole Algorithm}
     \label{fig:conv2}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width = 0.85\textwidth]{./Figures/convergenceq22.pdf}
     \caption{Convergence of Murman-Cole Algorithm}
     \label{fig:conv22}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width = 0.85\textwidth]{./Figures/cpsurf.pdf}
     \caption{$C_p$ Surface Distribution}
     \label{fig:cpsurf}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htbp]
 \centering
 \foreach \i in {80,82,84} {%
     \begin{subfigure}[p]{0.83\textwidth}
@@ -111,7 +105,7 @@ Figure \ref{fig:cpcontour8084} and \ref{fig:cpcontour8690} show the coefficient 
 \label{fig:cpcontour8084}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htbp]
 \centering
 \foreach \i in {86,88,90} {%
     \begin{subfigure}[p]{0.83\textwidth}
@@ -122,6 +116,51 @@ Figure \ref{fig:cpcontour8084} and \ref{fig:cpcontour8690} show the coefficient 
 \label{fig:cpcontour8690}
 \end{figure}
 
+\clearpage
+
+\section*{Grid Study}
+
+The coefficient of pressure $C_p$ for the coarse, medium and fine grid is plotted in Figure \ref{fig:q3cpsurf}.
+The shock location minimally moves upstream as the grid is refined.
+From the location of the points on the shock, the reason could be simply because the coarse grid does not have enough points on the airfoil to accurately represent the small recovery.
+The pressure recovery is however seen in the contour plot from the previous section on the coarse grid.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{./Figures/q3cpsurf.pdf}
+    \caption{$C_p$ Surface Distribution for Different Grid Sizes}
+    \label{fig:q3cpsurf}
+\end{figure}
+
+\clearpage
+\section*{Solvers}
+
+This section compares the Gauss Seidel (GS) method and the line-implicit Gauss-Seidel (LGS) method.
+The residual is plotted against CPU time and number of iterations Figure \ref{fig:q4time} and \ref{fig:q4res}.
+The LGS method requires approximately two-thirds of the iterations of GS method to converge to 5\textsc{E-}15.
+However, the lower number of iterations is offset by the higher CPU time per iteration.
+
+The earlier iterations converge much quicker for the LGS method until approximately 1\textsc{E-}9.
+Then, each step afterwards does not improve the solution enough to offset the high CPU time cost.
+The convergence to machine precision ends up between fairly equal in terms of CPU time if machine precision is required.
+If a lower tolerance is acceptable, LGS will be quicker to converge.
+
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{./Figures/q4time.pdf}
+    \caption{$C_p$ Surface Distribution for Different Grid Sizes}
+    \label{fig:q4time}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{./Figures/q4res.pdf}
+    \caption{$C_p$ Surface Distribution for Different Grid Sizes}
+    \label{fig:q4res}
+\end{figure}
+
+\clearpage
 \section*{Codes}
 
 Code has been written in FORTRAN. Default arithmetic operations are in double precision and optimization level -O3.
