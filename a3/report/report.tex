@@ -18,6 +18,7 @@
 \usepackage{booktabs}
 \usepackage{pdfpages}
 \usepackage{pgffor}
+\usepackage[section]{placeins}
 
 
 \lstdefinestyle{mystyle}{
@@ -62,6 +63,8 @@ The $159 \times 79$ and $317 \times 157$ grids will be referred as the medium an
 \section*{Mach Number Study}
 
 In this section, the coarse grid is used and the free-stream Mach number $M_{in}$ is varied between $[0.80,0.90]$ with increments of $0.02$.
+A total inlet temperature and static pressure of 1.0 is used.
+
 Figure \ref{fig:conv2} shows the convergence of the algorithm down to 5\textsc{E-}15.
 Higher $M_{in}$ seem to take slightly more iterations to converge.
 It can be explained by looking at the earlier iterations shown in Figure \ref{fig:conv22}.
@@ -73,8 +76,8 @@ As the $M_{in}$ increases, a shock forms and starts moving aft, until it reaches
 Moreover, the strength of the shock also increases since a higher decrease in static pressure is required to retrieve the atmosphere pressure.
 
 Figure \ref{fig:cpcontour8084} and \ref{fig:cpcontour8690} show the coefficient of pressure contours for the different $M_{in}$.
-A normal shock occurs for Mach numbers between 0.82 and 0.88.
-An oblique shock appears at the trailing edge for a Mach number of 0.90.
+A normal shock occurs for $M_{in}$ between 0.82 and 0.88.
+An oblique shock appears at the trailing edge for a $M_{in}$ of 0.90.
 
 \begin{figure}[!htbp]
     \centering
@@ -104,7 +107,7 @@ An oblique shock appears at the trailing edge for a Mach number of 0.90.
         \includegraphics[width=\linewidth]{./Figures/cpcontour_\i.pdf}
     \end{subfigure}
 }
-\caption{$C_p$ Contour Plots for Mach = 0.80, 0.82, 0.84}
+\caption{$C_p$ Contour Plots for $M_{in}$ = 0.80, 0.82, 0.84}
 \label{fig:cpcontour8084}
 \end{figure}
 
@@ -115,7 +118,7 @@ An oblique shock appears at the trailing edge for a Mach number of 0.90.
         \includegraphics[width=\linewidth]{./Figures/cpcontour_\i.pdf}
     \end{subfigure}
 }
-\caption{$C_p$ Contour Plots for Mach = 0.86, 0.88, 0.90}
+\caption{$C_p$ Contour Plots for $M_{in}$ = 0.86, 0.88, 0.90}
 \label{fig:cpcontour8690}
 \end{figure}
 
@@ -163,7 +166,6 @@ If a lower tolerance is acceptable, LGS will be quicker to converge.
     \label{fig:q4res}
 \end{figure}
 
-\clearpage
 \section*{Codes}
 
 Code has been written in FORTRAN. Default arithmetic operations are in double precision and optimization level -O3.
