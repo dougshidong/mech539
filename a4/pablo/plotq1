@@ -1,0 +1,5 @@
+for nbp = 10:10:100
+    fname = sprintf('pressure%d.mat', nbp);
+    load(fname);
+    plot(z(1:nbp+1,1),Cpj); hold on;
+end
