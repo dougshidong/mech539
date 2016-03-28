@@ -15,7 +15,9 @@ for nbp = 20:10:100
     cl_list(i) = Cl;
     cd_list(i) = cd;
 end
-legend('20','30','40','50','60','70','80','90','100');
+grid on
+legend('20 panels','30 panels','40 panels','50 panels','60 panels',...
+       '70 panels','80 panels','90 panels','100 panels');
 set(gca,'YDir','Reverse');
 title('Pressure Distribution for Various Grid Sizes');
 xlabel('x')

@@ -84,8 +84,8 @@ for j=1:nbp
 end
 
 Cl = imag(F)*cos(alfar) - real(F)*sin(alfar);
-fname = sprintf('q2result_inviscid%d.mat', alfa);
-save(fname,'z','nbp', 'Cpj');
+fname = sprintf('q5cresult_%d.mat',1);
+save(fname,'z','nbp', 'Cpj', 'Cl');
 xcp = -cmle/imag(F);
 
 if Cl<0.001

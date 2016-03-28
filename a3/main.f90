@@ -6,7 +6,7 @@ program main
 
     implicit none
 
-    conv_tol = 1e-9
+    conv_tol = 5e-9
 !    call question2()
 !   call question3()
     call question4()
@@ -174,9 +174,10 @@ subroutine question4()
 
     character(len=20) :: fname
 
+    conv_tol = 5e-15
     M_in = 0.860d0
     multipliers = [1, 2, 4]
-    do i = 1, size(multipliers)
+    do i = 1, 2!size(multipliers)
         call gridin(multipliers(i))
         allocate(A(imax, jmax), mu(imax, jmax))
         allocate(ac(imax, jmax), bc(imax, jmax), cc(imax, jmax), & 

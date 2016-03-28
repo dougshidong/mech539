@@ -877,7 +877,7 @@ elseif strcmp(action,'cp'),
 
           ReL = get(reynoldsHndl,'UserData');
 
-          resup = solvebl(ReL,zup,nup,ueup,plotbl,1);
+          resup = solvebl(alfa,ReL,zup,nup,ueup,plotbl,1);
 
           figure(figNumber);
 
@@ -925,7 +925,7 @@ elseif strcmp(action,'cp'),
             h = text(xt,-yt,'TS','FontSize',[14],'HorizontalAlignment','center');
           end; 
 
-          reslo = solvebl(ReL,zlo,nlo,uelo,plotbl,2);
+          reslo = solvebl(alfa,ReL,zlo,nlo,uelo,plotbl,2);
 
           figure(figNumber);
  
@@ -976,9 +976,8 @@ elseif strcmp(action,'cp'),
           % Computation of the Drag coefficient
 
           cd = sy(resup(1),resup(2),resup(3),reslo(1),reslo(2),reslo(3));
-
-          fname = sprintf('pressure%d.mat', nbp);
-          save(fname,'cd','-append');
+          fname = sprintf('q5cresult_%d.mat', 1);
+          save(fname,'cd','resup','reslo','-append');
        end;
       
        %------ Display the coefficients

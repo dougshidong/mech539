@@ -1,4 +1,4 @@
-function res = solvebl(Re,z,n,ue,plotcp,side);
+function res = solvebl(alfa,Re,z,n,ue,plotcp,side);
 
 nbp2 = 200;  % bl discretization
 
@@ -358,7 +358,10 @@ if plotcp == 1
       h = title('Lower Side');set(h,'Fontsize',[14]); 
       h = xlabel('Arc Length s');set(h,'Fontsize',[14]); 
       h = ylabel('Skin Friction Coefficient Cf');set(h,'Fontsize',[14]);
-
+      fname = sprintf('q4result3_%d.mat', alfa);
+      cflower=cf;
+      slower=s;
+      save(fname,'slower','cflower','-append');
     end;
 
 end;

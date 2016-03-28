@@ -61,7 +61,7 @@ nt = int(np.ceil(tf / dt))
 # Constant
 c = 0.5;
 
-q = 4
+q = 3
 q3calc = 0
 # Exact Solution
 plt.figure(figsize=(10,5))
@@ -82,7 +82,7 @@ if q == 1:
               4 : maccormack}
 if q == 2:
     nscheme = 2
-    nxlist = [41, 81, 161, 321]
+    nxlist = [41, 161, 641, 2561]
     scheme = {0 : upwind,
               1 : maccormack}
 if q == 3:
@@ -196,6 +196,6 @@ if q == 3:
     plt.ylabel(r'Error')
 
 plt.savefig('plot.pdf')
-plt.savefig('./report/Figures/q4_1.pdf')
+plt.savefig('./report/Figures/q3.pdf')
 
 # Plotting Q2

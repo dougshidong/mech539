@@ -74,7 +74,7 @@ module solvers
         
         error = res
         resi(iter) = res
-!       if(mod(iter, 1000) == 0) write(*,*) iter, res
+        if(mod(iter, 10000) == 0) write(*,*) iter, res
         call cpu_time(times(iter))
     end do ! While Loop
 

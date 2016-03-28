@@ -25,6 +25,7 @@ legend('Inviscid \alpha = 0','Viscous \alpha = 0', ...
 set(gca,'YDir','Reverse');
 title('Pressure Validation');
 xlabel('x')
+xlim([0,1])
 ylabel('$C_p$')
 export_fig ('../report/figures/q2pressure.pdf')
 hold off
