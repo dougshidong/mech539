@@ -92,7 +92,7 @@ From Figure \ref{fig:q1l} and \ref{fig:q1d}, 30-40 panels seem to be sufficient 
     {100} & 0.4782  & 0.0082 \\
 \bottomrule
 \end{tabular}
-\caption{Lift and Drag Coeffcients for NACA0012, $Re = 1\textsc{e}06$, $\alpha = 4^{\circ}$}
+\caption{Lift and Drag Coefficients for NACA0012, $Re = 1.00\textsc{e}06$, $\alpha = 4^{\circ}$}
 \label{tab1}
 \end{table}
 
@@ -119,8 +119,18 @@ From Figure \ref{fig:q1l} and \ref{fig:q1d}, 30-40 panels seem to be sufficient 
     \label{fig:q2}
 \end{figure}
 
+Figure \ref{fig:q2} shows numerical and experimental solutions of the NACA0012 at an angle of attack $\alpha = 0^\circ$ and $\alpha = 10^\circ$ with $Re = 2.88\textsc{e}06$.
+The pressure distribution from the inviscid and viscous runs are exactly the same. Since the solver does not iterate between the solutions of the flow field and the boundary layer, the same flow field is solved in the first place.
+
+For $\alpha = 0^\circ$ the pressure distribution is the same on lower and upper surface as expected due to symmetry. For $\alpha = 10^\circ$ the pressure distribution shows a negative pressure on the upper surface and a positive pressure on the lower surface, creating lift.
+
+The potential flow solver is surprisingly accurate when it is compared with experimental data from Gregory \& O'Reilly.
+This is because the assumption of inviscid, incompressible and irrotational flow are valid for this flow regime.
+It can be noticed that those assumptions start to be less adequate for a higher angle of attack.
+
 \section*{Question 3: Angle of Attack Study}
 
+\subsection*{(a) Pressure Distribution}
 \begin{figure}[!h]
     \centering
     \includegraphics[width = 0.95\textwidth]{./figures/q3pressure.pdf}
@@ -128,6 +138,12 @@ From Figure \ref{fig:q1l} and \ref{fig:q1d}, 30-40 panels seem to be sufficient 
     \label{fig:q3p}
 \end{figure}
 
+Figure \ref{fig:q3p} shows the pressure distribution of the NACA0012 for varying AoA's.
+As the AoA increases so does the pressure difference between the lower and upper surface.
+
+An increasing AoA exposes the lower surface more directly to the incoming flow, resulting in a lower velocity and higher pressure. Meanwhile, the upper surface requires a faster turn at the leading edge, resulting in a lower pressure.
+
+\subsection*{(b) Drag Polar}
 \begin{figure}[!h]
     \centering
     \includegraphics[width = 0.95\textwidth]{./figures/q3dp.pdf}
@@ -135,14 +151,72 @@ From Figure \ref{fig:q1l} and \ref{fig:q1d}, 30-40 panels seem to be sufficient 
     \label{fig:q3dp}
 \end{figure}
 
+Figure \ref{fig:q3dp} shows the drag polar of the NACA0012 for $\alpha = \left[0^\circ,10^\circ\right]$.
+
+\subsection*{(c) Effect on Drag}
+
+As the AoA increases, the drag coefficient increases as well.
+The lower AoA shows a quadratic increase in drag as the lift increases.
+However, the drag polar plot becomes linear starting around $\alpha = 4^\circ$.
+
+The only source of drag present in this solver is skin friction drag, which should be linearly proportional to the coefficient of lift.
+
 \section*{Question 4}
 
+\subsection*{(a) Drag Polar}
 \begin{figure}[!h]
     \centering
     \includegraphics[width = 0.95\textwidth]{./figures/q4dp.pdf}
     \caption{Drag Polar of Various Airfoils}
     \label{fig:q4a}
 \end{figure}
+
+The drag polar for the NACA0012, GA(W)-1 and DAE31 are shows in Figure \ref{fig:q4a}.
+
+The NACA0012 has negative lift for negative AoA's since it is a symmetric airfoil. Increasing the AoA in the positive direction leads to higher lift and drag coefficients.
+
+The GA(W)-1 has positive lift for negative AoA's.
+As the AoA increases, both the lift and drag coefficients increase.
+The slope of the drag polar shows that it is favorable to increase the AoA until $1^\circ$ since a lot of lift is gained for very little drag.
+
+The DAE31 has an even better performance than the previous two airfoils.
+Negative AoA's have positive lift coefficients.
+Between $-2^\circ$ and $3^\circ$, the drag coefficient decreases while the lift coefficient increases.
+
+An interesting feature to note is that after the initial lift-to-drag improvement, all three drag polars have the same slope, showing the linear proportionality of skin friction drag to lift. Figure \ref{fig:q4a} shows the obvious superiority of the DAE31, followed by the GA(W)-1, followed by the NACA0012 once the initial lift-to-drag improvement is reached.
+
+\subsection*{(b) Equivalent Lift}
+Table \ref{tab2} compiles the AoA required to achieve $C_L = 1.000$ and its corresponding drag coefficient $C_D$.
+It supports the superiority of the DAE31, GA(W)-1  NACA0012 airfoils in this order in a flow with $Re = 1.00\textsc{e}06$ and a required $C_L = 1.000$.
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{ccc} \toprule
+    {Airfoil} & {AoA} & {$C_D$} \\ \midrule
+    {NACA0012} & 8.537  & 0.0133\\
+    {GA(W)-1} & 3.310  & 0.0109\\
+    {DAE31} & 2.998  & 0.0070\\
+\bottomrule
+\end{tabular}
+\caption{Drag Coeffcients for an Equivalent Lift $C_L = 1.000$}
+\label{tab2}
+\end{table}
+
+\subsection*{(c) Pressure Distribution}
+
+Figure \ref{fig:q4c} shows the pressure distribution for the same three airfoils at an AoA $\alpha = 4^\circ$.
+The NACA0012's lower surface is almost entirely a region of favorable pressure gradient until the trailing edge (TE). However, the upper surface is almost entirely a region of adverse pressure gradient except the leading edge (LE).
+
+The GA(W)-1 has a change in pressure gradient on both its upper and lower surface at about 55\% of the chord.
+Before this turning point, the pressure gradient was slightly adverse for its upper surface and slightly favorable on its lower surface.
+Past the 55\% chord length, the adverse pressure gradient becomes stronger on the upper surface and an adverse pressure gradient develops on its lower surface.
+Those phenomena can be explained by the start of the cusp changing the curvature of the airfoil in this area.
+
+The DAE31's lower surface has very little change in pressure along its chord. The upper surface shows a small adverse pressure gradient until about 55\% of the chord. The pressure gradient then increases higher than the one of the GA(W)-1.
+%Looking at the airfoil, the curvature of the top surface mostly determines its shape, which explains the almost constant lower surface pressure.
+
+In all three cases, the leading edge produces the most lift.
+However, the NACA0012 generates almost all of its lifting power at the leading edge, while the GA(W)-1 and DAE31 generate a non-trivial amount of lift throughout the chord-length.
 
 \begin{figure}[!h]
     \centering
@@ -151,26 +225,99 @@ From Figure \ref{fig:q1l} and \ref{fig:q1d}, 30-40 panels seem to be sufficient 
     \label{fig:q4c}
 \end{figure}
 
-\begin{figure}[!h]
+
+\subsection*{(d) Skin Friction Coefficient and Transition}
+\begin{figure}[!th]
     \centering
-    \includegraphics[width = 0.95\textwidth]{./figures/q4uppercf.pdf}
+    \includegraphics[width = 0.85\textwidth]{./figures/q4uppercf.pdf}
     \caption{Skin Friction Coefficient on Upper Surface at $\alpha = 4^\circ$}
     \label{fig:q4dupper}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!th]
     \centering
-    \includegraphics[width = 0.95\textwidth]{./figures/q4lowercf.pdf}
+    \includegraphics[width = 0.85\textwidth]{./figures/q4lowercf.pdf}
     \caption{Skin Friction Coefficient on Lower Surface at $\alpha = 4^\circ$}
     \label{fig:q4dlower}
 \end{figure}
 
-\section*{Codes}
+Figure \ref{fig:q4dupper} and \ref{fig:q4dlower} show the skin friction drag coefficient along the arclength and where the laminar-to-turbulent transition occurs for an AoA $\alpha = 4^\circ$.
+Since skin friction drag is the only source of drag in this numerical solution, more drag will be generated by turbulent regions.
+Therefore, the earlier the transition, the more drag the airfoil will generate.
 
-Code has been written in FORTRAN. Default arithmetic operations are in double precision and optimization level -O3 unless specified otherwise.
+On the upper surface, the NACA0012 becomes turbulent before both the GA(W)-1 and the DAE31. The DAE31 stays laminar for much longer than the other two airfoils. The DAE31 stays fully laminar on its lower surface, while the GA(W)-1 transitions before the NACA0012 on the lower surface.
 
-All codes are available on my GitHub:
+At an AoA $\alpha = 4^\circ$ the DAE31 has the lowest drag coefficient, followed by the NACA0012, followed by the GA(W)-1.
+The DAE31 obviously has less drag since it transitions much later than the other two.
+The NACA0012 transitions slightly later than the GA(W)-1 on the upper surface, but much later on its lower surface, resulting in a lower total drag for the NACA0012.
 
-\url{https://github.com/dougshidong/mech539/tree/master/a2}
+
+\section*{Question 5}
+\subsection*{(a) Effect of Thickness}
+
+Figure \ref{fig:q5apressure} shows the pressure distribution for varying thicknesses of the 4 digit NACA00XX.
+
+As thickness increases, the laminar-to-turbulent transition moves upwind until there is a laminar separation bubble for a thickness of 20\%.
+For thicknesses of 24\% and 26\%, there is a turbulent separation near the TE.
+The change in the transition location can be explained by the longer arclength traveled by the fluid when the airfoil is thicker.
+
+Figure \ref{fig:q5adrag} shows that an increasing AoA increases drag. This is expected since the transition happens earlier, leading to a larger turbulent region which finally leads to a higher skin friction drag coefficient.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./figures/q5apressure.pdf}
+    \caption{Pressure Distribution for Variable Thickness}
+    \label{fig:q5apressure}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./figures/q5dthick.pdf}
+    \caption{Effect of Thickness on Drag}
+    \label{fig:q5adrag}
+\end{figure}
+
+\subsection*{(b) Effect of Maximum Camber}
+
+Figure \ref{fig:q5apressure} shows the pressure distribution for varying maximum camber of the 4 digit NACAX412.
+
+As the camber increases, the top surface transition location does not change by much until laminar separation occurs at a maximum camber of 0.06\%.
+The lower surface transition is much more affected by the maximum camber and a separation bubble also occurs for a camber of 0.06\%.
+
+Since the transition occurs earlier as the maximum camber increases, the drag coefficient is expected to increase with camber. This is confirmed by Figure \ref{fig:q5bdrag}.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./figures/q5bpressure.pdf}
+    \caption{Pressure Distribution for Variable Maximum Camber}
+    \label{fig:q5bpressure}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./figures/q5dmaxcam.pdf}
+    \caption{Effect of Maximum Camber on Drag}
+    \label{fig:q5bdrag}
+\end{figure}
+\clearpage
+\subsection*{(c) Effect of Camber Location}
+Figure \ref{fig:q5apressure} shows the pressure distribution for varying maximum camber location of the 4 digit NACA4X12.
+
+The lower surface transition moves aft as the maximum camber location goes to the TE. Leading to a lower skin friction drag. However the upper surface transition moves downwind and then upwind, leading to an optimal camber location for minimum drag.
+
+It is interesting to note that when the camber occurs too early, laminar separation occurs instead of transition.
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./figures/q5cpressure.pdf}
+    \caption{Pressure Distribution for Variable Camber Location}
+    \label{fig:q5cpressure}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{./figures/q5dcamloc.pdf}
+    \caption{Effect of Camber Location on Drag}
+    \label{fig:q5cdrag}
+\end{figure}
 
 \end{document}
