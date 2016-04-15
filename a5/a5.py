@@ -179,7 +179,7 @@ if 0 == 1:
 
 def question1():
     fname = tempf
-#    fname = 'report/Figures/q1.pdf'
+    fname = 'report/Figures/q1.pdf'
     pp = PdfPages(fname)
     plt.figure(figsize = (6,6))
 
@@ -201,7 +201,7 @@ def question1():
 
 def question2():
     fname = tempf
-#    fname = 'report/Figures/q2.pdf'
+    fname = 'report/Figures/q2.pdf'
     pp = PdfPages(fname)
     plt.figure(figsize = (6,6))
 
@@ -223,9 +223,9 @@ def question2():
 
 def question4():
     fname = tempf
-#    fname = 'report/Figures/q3airfoil.pdf'
+    fname = 'report/Figures/q4airfoil.pdf'
     pp = PdfPages(fname)
-    plt.figure(figsize = (5,2))
+    plt.figure(figsize = (6,2))
 
     upper_lamsep = np.logical_and(x[le:tee,0] < 0.5, Cv[le:tee] < 0.0).argmax() + le
 
@@ -273,41 +273,45 @@ def question4():
 #                 '*k', ms = 2,label = 'Turbulent Separation')
     plt.annotate('Laminar Separation', xy=(x[lower_lamsep,0],y[lower_lamsep,0]),
                 fontsize = 7,
-                xytext=(x[lower_lamsep,0]-0.5,y[lower_lamsep,0]-0.08),
+                xytext=(x[lower_lamsep,0]-0.4,y[lower_lamsep,0]-0.10),
                 arrowprops=dict(arrowstyle="->")
                )
     plt.annotate('Laminar Separation', xy=(x[upper_lamsep,0]-0.01,y[upper_lamsep,0]),
                 fontsize = 7,
-                xytext=(x[upper_lamsep,0]-0.05,y[upper_lamsep,0]+0.07),
+                xytext=(x[upper_lamsep,0]-0.20,y[upper_lamsep,0]+0.07),
                 arrowprops=dict(arrowstyle="->")
                )
 
     plt.annotate('Turbulent Separation', xy=(x[upper_turbsep,0],y[upper_turbsep,0]),
                 fontsize = 7,
-                xytext=(x[upper_turbsep,0]-0.4,y[upper_turbsep,0]+0.07),
+                xytext=(x[upper_turbsep,0]-0.2,y[upper_turbsep,0]+0.07),
                 arrowprops=dict(arrowstyle="->")
                )
 
 
     plt.legend(loc=4,prop={'size':5})
 
-    plt.title(r'Laminar and Turbulent Regions')
+    plt.title(r'Laminar and Turbulent Regions',fontsize=10)
+#   plt.xlim([-0.05,1.05])
+#   plt.ylim([-0.11,0.11])
     plt.xlabel(r'$x$')
     plt.ylabel(r'$y$')
+    plt.tick_params(axis='both', which='major', labelsize=8)
+#   print np.linspace(-0.15,0.15,5)
+#   plt.yticks(np.linspace(-0.16, 0.16, 5))
+#   plt.yticks(np.arange(-0.12, 0.18, 0.06))
 
     plt.axis('equal')
-    plt.xlim([-0.1,1.1])
 
 #   legend1 = plt.legend([l1,l2,l3],["test1","test2","test3"], loc=4,prop={'size':5})
 #   plt.legend([d1, d2],["tes1","tes2"], loc=1,prop={'size':5})
 #   plt.gca().add_artist(legend1)
 
     plt.tight_layout()
-
     pp.savefig(bbx_inches='tight')
     pp.close()
 def uplus_yplus(index_i, max_j, fname):
-    ut = np.abs(rotate_vec(U[0,:,:], U[1,:,:], theta[index_i]))
+    ut = rotate_vec(U[0,:,:], U[1,:,:], theta[index_i])
 
     uplus = ut[0][index_i, 0:max_j] \
             / np.sqrt( abs(tauW[index_i]) / rho[index_i, 0] )
@@ -317,15 +321,16 @@ def uplus_yplus(index_i, max_j, fname):
             / ((mu[index_i,0] + edv[index_i,0])/rho[index_i, 0])
 
     pp = PdfPages(fname)
-    plt.figure(figsize = (6,6))
+    plt.figure(figsize = (8,6))
 
-    plt.semilogx(yplus, yplus, '-k',
-             ms=2, label = 'Lower Surface')
-    plt.semilogx(yplus, np.log(yplus) / 0.41 + 5.15, '-k',
-             ms=2, label = 'Lower Surface')
+    plt.semilogx(yplus, yplus, '--k',
+             label = r'$u^+ = y^+$')
+    plt.semilogx(yplus, np.log(yplus) / 0.41 + 5.15, '-.k',
+             label = r'$u^+ = \displaystyle\frac{1}{0.41} y^+ + 5.15$')
     plt.semilogx(yplus, uplus, '-sb',
-             ms=2, label = 'Lower Surface')
+             ms=2, label = 'Numerical')
 
+    plt.legend(loc=2,prop={'size':11})
     plt.grid()
 
     print uplus
@@ -340,12 +345,15 @@ def uplus_yplus(index_i, max_j, fname):
 
 
 def question6():
-    pp = PdfPages(tempf)
+    fname = 'report/Figures/q6.pdf'
+    fname = tempf
+    pp = PdfPages(fname)
 
-    f, axarr = plt.subplots(5,sharex=True, figsize=(8,12))
 
-    w = rhou
-    xlocs = [-10, 0.25, 0.5, 1.0, 2.0]
+#    w = np.sqrt(U[0,:,:]**2 + U[1,:,:])
+    w = U[0,:,:]
+    xlocs = [-10, 1.25, 1.5, 2.0, 3.0, 10]
+    f, axarr = plt.subplots(len(xlocs),sharex=True, figsize=(8,12))
     dx_init = 5.0e-6
     nbp = 90
     yend = 1
@@ -364,15 +372,22 @@ def question6():
                             y.flat),
                             w.flat,
                             (xn, yn),
-                            method='cubic')
+                            method='nearest')
     for (xi, xloc) in enumerate(xlocs):
         ax = axarr[xi]
-        ax.set_title(r'Plane $x$ = %3.2f' % xloc)
+        ax.set_title(r'Plane $x$ = %3.2f' % xloc, fontsize = 10)
         ax.plot(yn[0:nbp-1], wslice[0:nbp-1], '-s',
                 ms=2, label='Lower Farfield')
         ax.plot(yn[nbp:2*nbp-1], wslice[nbp:2*nbp-1], '-o',
                 ms=2, label='Upper Farfield')
         ax.grid()
+        ax.set_ylabel(r'$u$')
+        y_formatter = matplotlib.ticker.ScalarFormatter(useOffset=False)
+        ax.yaxis.set_major_formatter(y_formatter)
+        for tick in ax.xaxis.get_major_ticks():
+                        tick.label.set_fontsize(8)
+        for tick in ax.yaxis.get_major_ticks():
+                        tick.label.set_fontsize(8)
 
     for (xi, xloc) in enumerate(xlocs[1:]):
         ystart = 0.0
@@ -396,29 +411,90 @@ def question6():
                                 (xn, yn),
                                 method='linear')
         ax = axarr[xi+1]
-        ax.plot(yn[0:nbp-1], wslice[0:nbp-1], '-s',
+        ax.plot(wslice[0:nbp-1], yn[0:nbp-1], '-s',
                 ms=2, label = 'Lower Slice')
-        ax.plot(yn[nbp:2*nbp-1], wslice[nbp:2*nbp-1], '-o',
+        ax.plot(wslice[nbp:2*nbp-1], yn[nbp:2*nbp-1], '-o',
                 ms=2, label = 'Upper Slice')
 
 
     plt.legend(loc=4,prop={'size':6})
 
-    plt.suptitle(r'Momentum Profiles')
+#    plt.suptitle(r'Momentum Profiles',fontsize=16)
     plt.xlabel(r'$y$')
     plt.ylabel(r'$u$')
 
+    plt.tight_layout()
     pp.savefig(bbx_inches='tight')
+
+    pp.close()
+
+    return
+
+def question6b():
+    fname = 'report/Figures/q6.pdf'
+#    fname = tempf
+    pp = PdfPages(fname)
+
+    plt.figure(figsize = (8,6))
+
+    w = np.sqrt(U[0,:,:]**2 + U[1,:,:]**2)
+    xlocs = [1.25, 1.5, 2.0, 3.0, 5.0]
+    dx_init = 5.0e-6
+    nbp = 150
+    yend = 1
+
+    xloc = -10.0
+    ystart = 0.0
+    xn = xloc * np.ones([nbp * 2 + 1])
+    yn = np.empty([nbp * 2 + 1])
+    base = ((yend - ystart) / dx_init) ** (1.0/(nbp-1))
+    yn[nbp] = 0.
+    for j in range(nbp):
+        yn[nbp - j - 1] = -(ystart + dx_init * base**j)
+        yn[nbp + j + 1] = ystart + dx_init * base**j
+
+    wslice = inter.griddata((x.flat,
+                            y.flat),
+                            w.flat,
+                            (xn, yn),
+                            method='nearest')
+    for (xi, xloc) in enumerate(xlocs):
+        ystart = 0.0
+        xn = xloc * np.ones([nbp * 2])
+        yn = np.empty([nbp * 2])
+        base = ((yend - ystart) / dx_init) ** (1.0/(nbp-1))
+        for j in range(nbp):
+            yn[j] = -(ystart + dx_init * base**j)
+            yn[nbp + j] = ystart + dx_init * base**j
+
+        wslice = inter.griddata((x.flat,
+                                y.flat),
+                                w.flat,
+                                (xn, yn),
+                                method='linear')
+        plt.plot(wslice[0:2*nbp], yn[0:2*nbp], '-',
+                ms=2, label = 'x = %3.2f' %xloc)
+
+    plt.legend(loc=4,prop={'size':6})
+
+    plt.xlabel(r'Velocity')
+    plt.ylabel(r'$y$')
+    plt.ylim([-1,1])
+
+    plt.title('Momentum Deficit')
+
+    plt.tight_layout()
+    pp.savefig(bbx_inches='tight')
+
     pp.close()
 
     return
 
 
-
 #question1()
 #question2()
-question4()
-uplus_yplus(151, 100, 'temp.pdf')
-uplus_yplus(362, 100, 'temp.pdf')
-#question6()
+#question4()
+#uplus_yplus(151, 100, './report/Figures/q5lam.pdf')
+#uplus_yplus(362, 100, './report/Figures/q5turb.pdf')
+question6b()
 
